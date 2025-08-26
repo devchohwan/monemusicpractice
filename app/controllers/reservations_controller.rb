@@ -109,12 +109,15 @@ class ReservationsController < ApplicationController
   
   def generate_time_slots(date)
     slots = []
+    current_time = Time.current
     
     # 13:00부터 21:30까지 30분 단위 (브레이크타임 제외)
     (13..21).each do |hour|
       [0, 30].each do |minute|
-        time = date.to_time + hour.hours + minute.minutes
-        next if time < Time.current
+        time = date.to_time.in_time_zone('Seoul') + hour.hours + minute.minutes
+        
+        # 현재 시간보다 과거면 스킵 (30분 여유 시간 추가)
+        next if time <= current_time + 30.minutes
         
         # 브레이크타임 (17:30, 18:00, 18:30) 제외
         hour_minute = hour * 100 + minute
