@@ -22,7 +22,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-gray-50">
+  <body class="bg-gray-50" data-turbo="<%= controller_name.start_with?('devise') || controller_name.start_with?('sessions') || controller_name.start_with?('registrations') ? 'false' : 'true' %>">
     <% if user_signed_in? %>
       <nav class="bg-white shadow-sm border-b">
         <div class="px-4 py-3">

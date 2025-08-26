@@ -1,7 +1,19 @@
 class ApplicationController < ActionController::Base
+  # Turbo와 호환되도록 설정
+  protect_from_forgery with: :exception
+  
   allow_browser versions: :modern
   
   before_action :configure_permitted_parameters, if: :devise_controller?
+  
+  # Devise와 Turbo 호환성
+  class << self
+    def responder
+      @responder ||= Class.new(ActionController::Responder) do
+        include Devise::Responders::FlashResponder
+      end
+    end
+  end
   
   protected
   
