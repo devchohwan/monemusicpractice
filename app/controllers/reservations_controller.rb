@@ -114,7 +114,8 @@ class ReservationsController < ApplicationController
     # 13:00부터 21:30까지 30분 단위 (브레이크타임 제외)
     (13..21).each do |hour|
       [0, 30].each do |minute|
-        time = date.to_time.in_time_zone('Seoul') + hour.hours + minute.minutes
+        # 선택한 날짜의 특정 시간을 서울 타임존으로 생성
+        time = Time.zone.parse("#{date.strftime('%Y-%m-%d')} #{hour.to_s.rjust(2, '0')}:#{minute.to_s.rjust(2, '0')}:00")
         
         # 브레이크타임 (17:30, 18:00, 18:30) 제외
         hour_minute = hour * 100 + minute
