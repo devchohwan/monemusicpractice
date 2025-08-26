@@ -6,15 +6,6 @@ class ApplicationController < ActionController::Base
   
   before_action :configure_permitted_parameters, if: :devise_controller?
   
-  # Devise와 Turbo 호환성
-  class << self
-    def responder
-      @responder ||= Class.new(ActionController::Responder) do
-        include Devise::Responders::FlashResponder
-      end
-    end
-  end
-  
   protected
   
   def configure_permitted_parameters
