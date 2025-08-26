@@ -1,0 +1,16 @@
+/* 선택된 시간 슬롯의 hover 효과 제거 */
+.time-slot-btn.bg-blue-500:hover {
+  background-color: rgb(59 130 246) !important;
+  border-color: rgb(59 130 246) !important;
+}
+
+/* 선택된 날짜의 hover 효과 제거 */
+[data-date].bg-blue-500:hover {
+  background-color: rgb(59 130 246) !important;
+}
+
+/* 선택된 연습실의 hover 효과 제거 */
+.room-btn.bg-blue-100:hover {
+  background-color: rgb(219 234 254) !important;
+  border-color: rgb(59 130 246) !important;
+}

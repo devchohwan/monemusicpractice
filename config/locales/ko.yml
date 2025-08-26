@@ -1,0 +1,265 @@
+ko:
+  activerecord:
+    errors:
+      messages:
+        record_invalid: '유효성 검증 실패: %{errors}'
+        restrict_dependent_destroy:
+          has_one: "%{record}이(가) 존재하기 때문에 삭제할 수 없습니다"
+          has_many: "%{record}이(가) 존재하기 때문에 삭제할 수 없습니다"
+      models:
+        user:
+          attributes:
+            username:
+              taken: "이미 사용 중입니다"
+              blank: "를 입력해주세요"
+            name:
+              blank: "을 입력해주세요"
+            password:
+              blank: "를 입력해주세요"
+              too_short: "는 %{count}자 이상이어야 합니다"
+            password_confirmation:
+              confirmation: "가 일치하지 않습니다"
+            teacher:
+              blank: "를 선택해주세요"
+              inclusion: "는 목록에서 선택해주세요"
+        reservation:
+          attributes:
+            base:
+              - "해당 시간에 이미 예약이 있습니다"
+              - "이번 달은 패널티로 인해 예약이 불가능합니다"
+              - "현재 진행 중인 예약을 사용하지 않아 새로운 예약이 불가능합니다"
+              - "예약 시작 30분 전까지만 취소 가능합니다"
+            start_time:
+              - "과거 시간은 예약할 수 없습니다"
+            end_time:
+              - "종료 시간은 시작 시간 이후여야 합니다"
+    attributes:
+      user:
+        username: "아이디"
+        password: "비밀번호"
+        password_confirmation: "비밀번호 확인"
+        name: "이름"
+        teacher: "담당 선생님"
+        approved: "승인 여부"
+        is_admin: "관리자 권한"
+      reservation:
+        user: "사용자"
+        room: "연습실"
+        start_time: "시작 시간"
+        end_time: "종료 시간"
+        status: "상태"
+      room:
+        number: "연습실 번호"
+        has_outlet: "콘센트 유무"
+      penalty:
+        user: "사용자"
+        month: "월"
+        year: "년"
+        no_show_count: "노쇼 횟수"
+        cancel_count: "취소 횟수"
+        is_blocked: "차단 여부"
+  date:
+    abbr_day_names:
+    - 일
+    - 월
+    - 화
+    - 수
+    - 목
+    - 금
+    - 토
+    abbr_month_names:
+    - 
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    day_names:
+    - 일요일
+    - 월요일
+    - 화요일
+    - 수요일
+    - 목요일
+    - 금요일
+    - 토요일
+    formats:
+      default: "%Y/%m/%d"
+      long: "%Y년 %m월 %d일 (%a)"
+      short: "%m/%d"
+    month_names:
+    - 
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: 약 1시간
+        other: 약 %{count}시간
+      about_x_months:
+        one: 약 1개월
+        other: 약 %{count}개월
+      about_x_years:
+        one: 약 1년
+        other: 약 %{count}년
+      almost_x_years:
+        one: 거의 1년
+        other: 거의 %{count}년
+      half_a_minute: 30초
+      less_than_x_seconds:
+        one: 1초 이내
+        other: "%{count}초 이내"
+      less_than_x_minutes:
+        one: 1분 이내
+        other: "%{count}분 이내"
+      over_x_years:
+        one: 1년 이상
+        other: "%{count}년 이상"
+      x_seconds:
+        one: 1초
+        other: "%{count}초"
+      x_minutes:
+        one: 1분
+        other: "%{count}분"
+      x_days:
+        one: 1일
+        other: "%{count}일"
+      x_months:
+        one: 1개월
+        other: "%{count}개월"
+      x_years:
+        one: 1년
+        other: "%{count}년"
+    prompts:
+      second: 초
+      minute: 분
+      hour: 시
+      day: 일
+      month: 월
+      year: 년
+  errors:
+    format: "%{attribute}%{message}"
+    messages:
+      accepted: 을(를) 수락해야 합니다
+      blank: 을(를) 입력해주세요
+      confirmation: 이(가) 일치하지 않습니다
+      empty: 을(를) 입력해주세요
+      equal_to: 은(는) %{count}과(와) 같아야 합니다
+      even: 은(는) 짝수여야 합니다
+      exclusion: 은(는) 예약되어 있습니다
+      greater_than: 은(는) %{count}보다 커야 합니다
+      greater_than_or_equal_to: 은(는) %{count}보다 크거나 같아야 합니다
+      in: 은(는) %{count} 중 하나여야 합니다
+      inclusion: 은(는) 목록에 포함되어 있지 않습니다
+      invalid: 이(가) 올바르지 않습니다
+      less_than: 은(는) %{count}보다 작아야 합니다
+      less_than_or_equal_to: 은(는) %{count}보다 작거나 같아야 합니다
+      model_invalid: '유효성 검증 실패: %{errors}'
+      not_a_number: 은(는) 숫자가 아닙니다
+      not_an_integer: 은(는) 정수여야 합니다
+      odd: 은(는) 홀수여야 합니다
+      other_than: 은(는) %{count}과(와) 달라야 합니다
+      present: 은(는) 비어있어야 합니다
+      required: 은(는) 필수입니다
+      taken: 은(는) 이미 사용 중입니다
+      too_long:
+        one: 은(는) 1자 이내여야 합니다
+        other: 은(는) %{count}자 이내여야 합니다
+      too_short:
+        one: 은(는) 1자 이상이어야 합니다
+        other: 은(는) %{count}자 이상이어야 합니다
+      wrong_length:
+        one: 은(는) 1자여야 합니다
+        other: 은(는) %{count}자여야 합니다
+    template:
+      body: '다음 항목을 확인해 주세요:'
+      header:
+        one: 1개 오류로 인해 %{model}을(를) 저장할 수 없습니다
+        other: "%{count}개 오류로 인해 %{model}을(를) 저장할 수 없습니다"
+  helpers:
+    select:
+      prompt: 선택해주세요
+    submit:
+      create: "%{model} 만들기"
+      submit: "%{model} 저장"
+      update: "%{model} 수정"
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%n%u"
+        precision: 0
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: 원
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: 십억
+          million: 백만
+          quadrillion: 천조
+          thousand: 천
+          trillion: 조
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n%u"
+        units:
+          byte: 바이트
+          eb: EB
+          gb: GB
+          kb: KB
+          mb: MB
+          pb: PB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: " 및 "
+      two_words_connector: "와(과) "
+      words_connector: ", "
+  time:
+    am: 오전
+    formats:
+      default: "%Y/%m/%d %H:%M:%S"
+      long: "%Y년 %m월 %d일, %H시 %M분 %S초 %Z"
+      short: "%y/%m/%d %H:%M"
+    pm: 오후

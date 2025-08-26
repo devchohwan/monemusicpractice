@@ -1,0 +1,55 @@
+<div class="max-w-lg mx-auto">
+  <h2 class="text-xl font-bold mb-4">예약하기</h2>
+  
+  <% if flash[:alert] %>
+    <script>
+      alert('이미 예약하셨습니다. 예약한 시간을 먼저 사용해주세요');
+    </script>
+  <% end %>
+  
+  <div data-controller="reservation">
+    <!-- Step 1: 날짜 선택 -->
+    <div class="mb-6" data-reservation-target="dateSection">
+      <h3 class="font-medium mb-3">1. 날짜 선택</h3>
+      <div id="calendar-container" class="bg-white rounded-lg p-4 shadow">
+        <%= render partial: 'calendar', locals: { date: @date, selected_date: nil } %>
+      </div>
+    </div>
+    
+    <!-- Step 2: 시간 선택 -->
+    <div class="mb-6 hidden" data-reservation-target="timeSection">
+      <h3 class="font-medium mb-3">2. 시간 선택</h3>
+      <div id="time-slots-container" class="bg-white rounded-lg p-4 shadow">
+        <!-- Time slots will be loaded here -->
+      </div>
+    </div>
+    
+    <!-- Step 3: 연습실 선택 -->
+    <div class="mb-6 hidden" data-reservation-target="roomSection">
+      <h3 class="font-medium mb-3">3. 연습실 선택</h3>
+      <div id="rooms-container" class="bg-white rounded-lg p-4 shadow">
+        <!-- Available rooms will be loaded here -->
+      </div>
+    </div>
+    
+    <!-- 예약 확인 -->
+    <div class="hidden" data-reservation-target="confirmSection">
+      <%= form_with model: @reservation, local: true, data: { reservation_target: "form" } do |f| %>
+        <%= f.hidden_field :room_id, data: { reservation_target: "roomId" } %>
+        <%= f.hidden_field :start_time, data: { reservation_target: "startTime" } %>
+        <%= f.hidden_field :end_time, data: { reservation_target: "endTime" } %>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+          <h3 class="font-medium mb-2">예약 정보 확인</h3>
+          <p class="text-sm" data-reservation-target="summary"></p>
+        </div>
+        
+        <%= f.submit "예약하기", class: "w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 cursor-pointer" %>
+      <% end %>
+    </div>
+  </div>
+  
+  <div class="mt-6">
+    <%= link_to "← 뒤로가기", root_path, class: "text-gray-600 text-sm inline-flex items-center hover:text-gray-800" %>
+  </div>
+</div>

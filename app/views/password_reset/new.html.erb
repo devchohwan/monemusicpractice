@@ -1,0 +1,48 @@
+<div class="max-w-md mx-auto">
+  <h2 class="text-2xl font-bold mb-6 text-center">비밀번호 찾기</h2>
+  
+  <% if flash[:alert] %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  
+  <% if flash[:notice] %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 font-bold">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  
+  <p class="text-sm text-gray-600 mb-4">
+    가입시 입력한 정보를 정확히 입력해주세요.
+  </p>
+  
+  <%= form_with url: password_reset_path, local: true, class: "space-y-4" do |f| %>
+    <div>
+      <%= f.label :username, "아이디", class: "block text-sm font-medium mb-1" %>
+      <%= f.text_field :username, required: true, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+    
+    <div>
+      <%= f.label :name, "이름", class: "block text-sm font-medium mb-1" %>
+      <%= f.text_field :name, required: true, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+    
+    <div>
+      <%= f.label :teacher, "담당 선생님", class: "block text-sm font-medium mb-1" %>
+      <%= f.select :teacher,
+                  options_for_select(User::TEACHERS),
+                  { prompt: '선택하세요' },
+                  class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500",
+                  required: true %>
+    </div>
+    
+    <div>
+      <%= f.submit "다음", class: "w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 cursor-pointer" %>
+    </div>
+  <% end %>
+  
+  <div class="mt-6">
+    <%= link_to "← 로그인으로 돌아가기", new_user_session_path, class: "text-gray-600 text-sm inline-flex items-center hover:text-gray-800" %>
+  </div>
+</div>

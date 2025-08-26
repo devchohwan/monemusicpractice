@@ -1,0 +1,56 @@
+<div class="max-w-md mx-auto">
+  <h2 class="text-2xl font-bold mb-6 text-center">로그인</h2>
+
+  <% if flash[:notice] == 'signup_success' %>
+    <script>
+      alert('회원가입 신청이 완료되었습니다. 관리자 승인을 기다려주세요.');
+    </script>
+  <% elsif flash[:alert] %>
+    <script>
+      <% if flash[:alert] == 'no_user' %>
+        alert('가입되지 않은 회원입니다.');
+      <% elsif flash[:alert] == 'wrong_password' %>
+        alert('비밀번호가 잘못되었습니다.');
+      <% elsif flash[:alert] == 'not_approved' %>
+        alert('관리자 승인 대기중입니다.');
+      <% else %>
+        alert('아이디나 비밀번호가 잘못되었습니다.');
+      <% end %>
+    </script>
+  <% end %>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-4" }) do |f| %>
+    <div>
+      <%= f.label :username, "아이디", class: "block text-sm font-medium mb-1" %>
+      <%= f.text_field :username, autofocus: true, autocomplete: "username", class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :password, "비밀번호", class: "block text-sm font-medium mb-1" %>
+      <%= f.password_field :password, autocomplete: "current-password", class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="flex items-center">
+        <%= f.check_box :remember_me, class: "mr-2" %>
+        <%= f.label :remember_me, "로그인 상태 유지", class: "text-sm" %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.submit "로그인", class: "w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 cursor-pointer" %>
+    </div>
+  <% end %>
+
+  <div class="mt-4 text-center">
+    <%= link_to "비밀번호 찾기", password_reset_path, class: "text-blue-600 hover:text-blue-800 text-sm" %>
+  </div>
+
+  <div class="mt-2 text-center">
+    <%= render "devise/shared/links" %>
+  </div>
+  
+  <div class="mt-6">
+    <%= link_to "← 뒤로가기", root_path, class: "text-gray-600 text-sm inline-flex items-center hover:text-gray-800" %>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="max-w-lg mx-auto">
+  <h2 class="text-xl font-bold mb-4">내 예약</h2>
+  
+  <!-- 필터 -->
+  <div class="bg-white rounded-lg p-3 shadow mb-4">
+    <%= form_with url: reservations_path, method: :get, class: "flex flex-col gap-2" do |f| %>
+      <div class="flex gap-2">
+        <%= f.select :status, 
+            options_for_select([
+              ['전체 상태', ''],
+              ['이용 전', 'active'],
+              ['완료', 'completed'],
+              ['취소', 'cancelled'],
+              ['노쇼', 'no_show']
+            ], params[:status]),
+            {},
+            class: "flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+        
+        <%= f.date_field :date, 
+            value: params[:date],
+            class: "px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+      </div>
+      
+      <div class="flex gap-2">
+        <%= f.submit "검색", class: "flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer text-sm" %>
+        
+        <% if params[:status].present? || params[:date].present? %>
+          <%= link_to "초기화", reservations_path, class: "px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="space-y-3">
+    <% if @reservations.any? %>
+      <% @reservations.each do |reservation| %>
+        <div class="bg-white rounded-lg p-4 shadow">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <h3 class="font-medium">
+                <%= reservation.start_time.strftime('%Y년 %m월 %d일') %>
+              </h3>
+              <p class="text-sm text-gray-600">
+                <%= reservation.start_time.strftime('%H:%M') %> - <%= reservation.end_time.strftime('%H:%M') %>
+              </p>
+              <p class="text-sm text-gray-600"><%= reservation.room.number %>번 연습실</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <% if reservation.room.has_outlet %>
+                <span class="text-xs">🔌</span>
+              <% end %>
+              <% case reservation.status %>
+              <% when 'active' %>
+                <% if reservation.end_time < Time.current %>
+                  <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">완료</span>
+                <% else %>
+                  <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">이용 전</span>
+                <% end %>
+              <% when 'cancelled' %>
+                <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">취소</span>
+              <% when 'no_show' %>
+                <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">노쇼</span>
+              <% when 'completed' %>
+                <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">완료</span>
+              <% end %>
+            </div>
+          </div>
+          
+          <% if reservation.cancellable? %>
+            <div class="mt-3 pt-3 border-t">
+              <%= link_to "예약 취소", cancel_reservation_path(reservation), 
+                          method: :patch, 
+                          data: { turbo_method: :patch, turbo_confirm: "예약을 취소하시겠습니까?" },
+                          class: "text-sm text-red-600 hover:text-red-800" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="text-center py-8">
+        <p class="text-gray-500 mb-4">예약이 없습니다.</p>
+        <%= link_to "예약하기", new_reservation_path, 
+                    class: "inline-block bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700" %>
+      </div>
+    <% end %>
+  </div>
+  
+  <div class="mt-6">
+    <%= link_to "홈으로", root_path, class: "text-gray-600 text-sm" %>
+  </div>
+</div>

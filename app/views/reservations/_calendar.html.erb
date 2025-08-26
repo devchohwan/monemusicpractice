@@ -1,0 +1,53 @@
+<%
+  start_date = date.beginning_of_month
+  end_date = date.end_of_month
+  weeks = (start_date.beginning_of_week..end_date.end_of_week).to_a.each_slice(7)
+  today = Date.current
+%>
+
+<div class="calendar" data-month="<%= date.strftime('%Y-%m') %>">
+  <div class="flex justify-between items-center mb-4">
+    <button class="text-gray-600 hover:text-gray-800" data-action="click->reservation#prevMonth">
+      ←
+    </button>
+    <h3 class="font-medium"><%= date.strftime('%Y년 %m월') %></h3>
+    <button class="text-gray-600 hover:text-gray-800" data-action="click->reservation#nextMonth">
+      →
+    </button>
+  </div>
+  
+  <div class="grid grid-cols-7 gap-1 text-center text-xs mb-2">
+    <% %w[일 월 화 수 목 금 토].each do |day| %>
+      <div class="font-medium text-gray-600"><%= day %></div>
+    <% end %>
+  </div>
+  
+  <div class="grid grid-cols-7 gap-1">
+    <% weeks.each do |week| %>
+      <% week.each do |day| %>
+        <%
+          is_today = day == today
+          is_past = day < today
+          is_current_month = day.month == date.month
+          is_selected = selected_date == day
+          
+          css_classes = "p-2 text-center cursor-pointer rounded"
+          css_classes += " opacity-30" unless is_current_month
+          css_classes += " cursor-not-allowed" if is_past && !is_today
+          css_classes += " text-green-600 font-bold" if is_today
+          css_classes += " bg-blue-500 text-white" if is_selected
+          css_classes += " hover:bg-blue-100" if !is_past && is_current_month && !is_selected
+        %>
+        
+        <div class="<%= css_classes %>" 
+             data-date="<%= day.strftime('%Y-%m-%d') %>"
+             data-action="<%= 'click->reservation#selectDate' unless is_past && !is_today %>">
+          <span class="text-sm <%= 'text-gray-400' if is_past && !is_today %>"><%= day.day %></span>
+          <% if is_today %>
+            <div class="text-xs">오늘</div>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
