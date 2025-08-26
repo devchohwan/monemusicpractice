@@ -21,7 +21,7 @@ servers:
 # Credentials for your image host.
 registry:
   # Docker Hub 사용시
-  server: docker.io
+  # server: docker.io
   username: amuguona
   
   # Always use an access token rather than real password when possible.
@@ -34,9 +34,6 @@ env:
     - RAILS_MASTER_KEY
     - SECRET_KEY_BASE
   clear:
-    # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
-    SOLID_QUEUE_IN_PUMA: true
-    
     # Rails 환경 설정
     RAILS_ENV: production
     RAILS_SERVE_STATIC_FILES: true
