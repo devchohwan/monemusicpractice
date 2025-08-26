@@ -116,12 +116,12 @@ class ReservationsController < ApplicationController
       [0, 30].each do |minute|
         time = date.to_time.in_time_zone('Seoul') + hour.hours + minute.minutes
         
-        # 현재 시간보다 과거면 스킵 (30분 여유 시간 추가)
-        next if time <= current_time + 30.minutes
-        
         # 브레이크타임 (17:30, 18:00, 18:30) 제외
         hour_minute = hour * 100 + minute
         next if hour_minute == 1730 || hour_minute == 1800 || hour_minute == 1830
+        
+        # 과거 시간인지 체크 (30분 여유 시간 추가)
+        is_past = time <= current_time + 30.minutes
         
         slots << {
           time: time,
@@ -129,7 +129,8 @@ class ReservationsController < ApplicationController
           period: case hour
                   when 13..17 then '오후'
                   else '저녁'
-                  end
+                  end,
+          disabled: is_past  # 비활성화 플래그 추가
         }
       end
     end

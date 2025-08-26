@@ -9,10 +9,12 @@
         <h4 class="font-medium text-sm mb-2"><%= period %></h4>
         <div class="grid grid-cols-4 gap-2">
           <% grouped_slots[period].each do |slot| %>
-            <button class="time-slot-btn py-2 px-3 text-sm border rounded hover:bg-blue-100 hover:border-blue-500"
+            <button class="time-slot-btn py-2 px-3 text-sm border rounded 
+                          <%= slot[:disabled] ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-50' : 'hover:bg-blue-100 hover:border-blue-500' %>"
                     data-time="<%= slot[:time].iso8601 %>"
                     data-display="<%= slot[:display] %>"
-                    data-action="click->reservation#selectTime">
+                    data-action="<%= slot[:disabled] ? '' : 'click->reservation#selectTime' %>"
+                    <%= slot[:disabled] ? 'disabled' : '' %>>
               <%= slot[:display] %>
             </button>
           <% end %>
