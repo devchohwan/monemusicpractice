@@ -77,5 +77,10 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: storage/production.sqlite3
+  primary:
+    <<: *default
+    database: storage/production.sqlite3
+  cache:
+    <<: *default
+    database: storage/cache_production.sqlite3
+    migrations_paths: db/cache_migrate
