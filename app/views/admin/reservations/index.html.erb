@@ -71,26 +71,27 @@
               <%= reservation.start_time.strftime('%H:%M') %> - <%= reservation.end_time.strftime('%H:%M') %>
             </td>
             <td class="px-4 py-3 text-sm">
-              <% case reservation.status %>
-              <% when 'active' %>
-                <% if reservation.end_time < Time.current %>
-                  <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">완료</span>
-                <% else %>
-                  <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">이용 전</span>
-                <% end %>
+              <% status_text = reservation.status_display %>
+              <% case status_text %>
+              <% when '이용 전' %>
+                <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">이용 전</span>
+              <% when '이용 중' %>
+                <span class="px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded">이용 중</span>
+              <% when '완료', 'completed' %>
+                <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">완료</span>
               <% when 'cancelled' %>
                 <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">취소</span>
               <% when 'no_show' %>
                 <span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">노쇼</span>
-              <% when 'completed' %>
-                <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">완료</span>
+              <% else %>
+                <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded"><%= status_text %></span>
               <% end %>
             </td>
             <td class="px-4 py-3 text-sm">
               <%= form_with url: update_status_admin_reservation_path(reservation), method: :patch do |f| %>
                 <%= f.select :status, 
                     options_for_select([
-                      ['이용 전', 'active'],
+                      ['활성', 'active'],
                       ['완료', 'completed'],
                       ['취소', 'cancelled'],
                       ['노쇼', 'no_show']
