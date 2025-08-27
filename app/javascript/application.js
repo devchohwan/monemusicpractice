@@ -3,6 +3,9 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import { Turbo } from "@hotwired/turbo-rails"
 
+// Turbo 캐시 비활성화
+Turbo.session.drive = false
+
 // CSRF 토큰 자동 포함 설정
 document.addEventListener("turbo:before-fetch-request", (event) => {
   const token = document.querySelector('meta[name="csrf-token"]').content
