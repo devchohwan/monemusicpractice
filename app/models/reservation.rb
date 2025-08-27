@@ -32,6 +32,22 @@ class Reservation < ApplicationRecord
     update!(status: 'no_show') if status == 'active' && end_time < Time.current
   end
   
+  def status_display
+    return status unless status == 'active'
+    
+    current_time = Time.current
+    
+    if current_time < start_time
+      '이용 전'
+    elsif current_time >= start_time && current_time < end_time
+      '이용 중'
+    elsif current_time >= end_time
+      '완료'
+    else
+      status
+    end
+  end
+  
   private
   
   def validate_time_range
