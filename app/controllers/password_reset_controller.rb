@@ -58,7 +58,7 @@ class PasswordResetController < ApplicationController
         # 토큰 클리어
         user.update(password_reset_token: nil, password_reset_sent_at: nil)
         
-        flash[:notice] = '비밀번호가 변경되었습니다. 새 비밀번호로 로그인해주세요.'
+        flash[:alert_message] = '비밀번호가 변경되었습니다. 로그인 해주세요.'
         redirect_to new_user_session_path
       else
         flash[:alert] = '비밀번호 재설정에 실패했습니다.'

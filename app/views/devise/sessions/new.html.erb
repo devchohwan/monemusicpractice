@@ -5,6 +5,10 @@
     <script>
       alert('회원가입 신청이 완료되었습니다. 관리자 승인을 기다려주세요.');
     </script>
+  <% elsif flash[:alert_message] %>
+    <script>
+      alert('<%= flash[:alert_message] %>');
+    </script>
   <% elsif flash[:alert] %>
     <script>
       <% if flash[:alert] == 'no_user' %>
