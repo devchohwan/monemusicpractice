@@ -34,7 +34,7 @@
     
     <!-- 예약 확인 -->
     <div class="hidden" data-reservation-target="confirmSection">
-      <%= form_with model: @reservation, local: true, data: { reservation_target: "form" } do |f| %>
+      <%= form_with model: @reservation, local: true, data: { reservation_target: "form", turbo: false } do |f| %>
         <%= f.hidden_field :room_id, data: { reservation_target: "roomId" } %>
         <%= f.hidden_field :start_time, data: { reservation_target: "startTime" } %>
         <%= f.hidden_field :end_time, data: { reservation_target: "endTime" } %>

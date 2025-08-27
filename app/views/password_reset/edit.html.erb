@@ -11,7 +11,7 @@
     새로 사용할 비밀번호를 입력해주세요.
   </p>
   
-  <%= form_with url: password_reset_path, method: :patch, local: true, class: "space-y-4" do |f| %>
+  <%= form_with url: password_reset_path, method: :patch, local: true, class: "space-y-4", data: { turbo: false } do |f| %>
     <%= hidden_field_tag :token, params[:token] %>
     <div>
       <%= f.label :password, "새 비밀번호", class: "block text-sm font-medium mb-1" %>
