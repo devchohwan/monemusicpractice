@@ -20,8 +20,8 @@ ko:
             password_confirmation:
               confirmation: "가 일치하지 않습니다"
             teacher:
-              blank: "를 선택해주세요"
-              inclusion: "는 목록에서 선택해주세요"
+              blank: "을 선택해주세요"
+              inclusion: "은 목록에서 선택해주세요"
         reservation:
           attributes:
             base:
