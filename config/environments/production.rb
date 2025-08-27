@@ -30,6 +30,10 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = false  # HTTP 접속을 위해 일시적으로 비활성화
 
+  # Allow requests from your domain
+  config.hosts << "practice.monemusic.com"
+  config.hosts << "monemusic.com"  # 메인 도메인도 추가
+
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
