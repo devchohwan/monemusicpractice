@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Users::SessionsController < Devise::SessionsController
-  respond_to :html, :turbo_stream
   
   # before_action :configure_sign_in_params, only: [:create]
 
@@ -35,7 +34,7 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(resource_name, resource)
         flash.clear
         yield resource if block_given?
-        respond_with resource, location: after_sign_in_path_for(resource)
+        redirect_to after_sign_in_path_for(resource)
       end
     end
   rescue StandardError
