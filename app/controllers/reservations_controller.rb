@@ -121,8 +121,8 @@ class ReservationsController < ApplicationController
         hour_minute = hour * 100 + minute
         next if hour_minute == 1730 || hour_minute == 1800 || hour_minute == 1830
         
-        # 과거 시간인지 체크 (30분 여유 시간 추가)
-        is_past = time <= current_time + 30.minutes
+        # 과거 시간인지 체크
+        is_past = time <= current_time
         
         slots << {
           time: time,
