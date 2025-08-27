@@ -29,7 +29,7 @@
 
     <div>
       <%= f.label :teacher, "담당 선생님", class: "block text-sm font-medium mb-1" %>
-      <p class="text-xs mt-1 mb-[1px] text-red-600">*반드시 지금 배우고 있는 선생님을 선택해주세요.</p>
+      <p class="text-xs mt-1 mb-[2px] text-red-600">*반드시 지금 배우고 있는 선생님을 선택해주세요.</p>
       <%= f.select :teacher, options_for_select(User::TEACHERS, resource.teacher), { prompt: "선생님을 선택하세요" }, class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" %>
     </div>
 
