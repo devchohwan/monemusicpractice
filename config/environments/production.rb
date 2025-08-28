@@ -87,7 +87,7 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
-    "54.180.122.127",  # EC2 Public IP
+    "115.68.195.125",  # EC2 Public IP
     "localhost"
   ]
   
