@@ -2,7 +2,7 @@
 service: monemusicpractice
 
 # Name of the container image.
-image: devchohwan/monemusic
+image: amuguona/monemusicpractice
 
 # Deploy to these servers.
 servers:
