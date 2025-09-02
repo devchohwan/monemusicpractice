@@ -1,7 +1,7 @@
 <%
   start_date = date.beginning_of_month
   end_date = date.end_of_month
-  weeks = (start_date.beginning_of_week..end_date.end_of_week).to_a.each_slice(7)
+  weeks = (start_date.beginning_of_week(:sunday)..end_date.end_of_week(:sunday)).to_a.each_slice(7)
   today = Date.current
 %>
 
