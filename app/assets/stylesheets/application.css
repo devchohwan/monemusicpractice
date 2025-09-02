@@ -8,3 +8,56 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+/* Custom Button Styles for Admin */
+.btn-hold {
+  background-color: #ea580c !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.btn-hold:hover {
+  background-color: #c2410c !important;
+}
+
+.link-hold {
+  color: #ea580c !important;
+  font-size: 0.875rem !important;
+  text-decoration: none !important;
+}
+
+.link-hold:hover {
+  color: #c2410c !important;
+}
+
+.btn-approve {
+  background-color: #059669 !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.btn-approve:hover {
+  background-color: #047857 !important;
+}
+
+.btn-reject {
+  background-color: #dc2626 !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.875rem !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+}
+
+.btn-reject:hover {
+  background-color: #b91c1c !important;
+}

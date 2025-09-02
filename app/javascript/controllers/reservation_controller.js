@@ -8,6 +8,36 @@ export default class extends Controller {
     this.selectedDate = null
     this.selectedTime = null
     this.selectedRoom = null
+    
+    // Add submit event listener to form
+    if (this.hasFormTarget) {
+      this.formTarget.addEventListener('submit', this.handleSubmit.bind(this))
+    }
+  }
+  
+  handleSubmit(event) {
+    // Get reservation info
+    const startTime = new Date(this.startTimeTarget.value)
+    const endTime = new Date(this.endTimeTarget.value)
+    const roomNumber = this.selectedRoom ? this.selectedRoom.number : ''
+    
+    const dateStr = startTime.toLocaleDateString('ko-KR', { 
+      year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' 
+    })
+    const startTimeStr = startTime.toLocaleTimeString('ko-KR', { 
+      hour: '2-digit', minute: '2-digit' 
+    })
+    const endTimeStr = endTime.toLocaleTimeString('ko-KR', { 
+      hour: '2-digit', minute: '2-digit' 
+    })
+    
+    // Create confirm message
+    const confirmMessage = `예약 정보\n\n날짜: ${dateStr}\n시간: ${startTimeStr} - ${endTimeStr}\n연습실: ${roomNumber}번\n\n예약하시겠습니까?`
+    
+    // Show confirm dialog
+    if (!confirm(confirmMessage)) {
+      event.preventDefault() // Cancel form submission if user clicks cancel
+    }
   }
   
   selectDate(event) {

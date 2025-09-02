@@ -28,14 +28,23 @@ class Admin::ReservationsController < ApplicationController
   
   def destroy
     @reservation.destroy
-    redirect_to admin_reservations_path, notice: '예약이 삭제되었습니다.'
+    redirect_params = {}
+    redirect_params[:search] = params[:search] if params[:search].present?
+    redirect_params[:status] = params[:status] if params[:status].present?
+    redirect_params[:date] = params[:date] if params[:date].present?
+    redirect_to admin_reservations_path(redirect_params), notice: '예약이 삭제되었습니다.'
   end
   
   def update_status
+    redirect_params = {}
+    redirect_params[:search] = params[:search] if params[:search].present?
+    redirect_params[:status] = params[:filter_status] if params[:filter_status].present?
+    redirect_params[:date] = params[:date] if params[:date].present?
+    
     if @reservation.update(status: params[:status])
-      redirect_to admin_reservations_path, notice: '예약 상태가 변경되었습니다.'
+      redirect_to admin_reservations_path(redirect_params), notice: '예약 상태가 변경되었습니다.'
     else
-      redirect_to admin_reservations_path, alert: '상태 변경에 실패했습니다.'
+      redirect_to admin_reservations_path(redirect_params), alert: '상태 변경에 실패했습니다.'
     end
   end
   

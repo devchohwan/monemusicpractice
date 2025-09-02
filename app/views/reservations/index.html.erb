@@ -71,8 +71,14 @@
             <div class="mt-3 pt-3 border-t">
               <%= link_to "예약 취소", cancel_reservation_path(reservation), 
                           method: :patch, 
-                          data: { turbo_method: :patch, turbo_confirm: "예약을 취소하시겠습니까?" },
-                          class: "text-sm text-red-600 hover:text-red-800" %>
+                          data: { 
+                            turbo_method: :patch,
+                            reservation_date: reservation.start_time.strftime('%Y년 %m월 %d일'),
+                            reservation_time: "#{reservation.start_time.strftime('%H:%M')} - #{reservation.end_time.strftime('%H:%M')}",
+                            reservation_room: "#{reservation.room.number}번",
+                            action: "reservation-cancel"
+                          },
+                          class: "text-sm text-red-600 hover:text-red-800 reservation-cancel-btn" %>
             </div>
           <% end %>
         </div>
@@ -90,3 +96,50 @@
     <%= link_to "홈으로", root_path, class: "text-gray-600 text-sm" %>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add event listeners to all cancel buttons
+  const cancelButtons = document.querySelectorAll('.reservation-cancel-btn');
+  
+  cancelButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+      
+      // Get reservation info from data attributes
+      const date = this.dataset.reservationDate;
+      const time = this.dataset.reservationTime;
+      const room = this.dataset.reservationRoom;
+      
+      // Create confirm message
+      const confirmMessage = `예약 정보\n\n날짜: ${date}\n시간: ${time}\n연습실: ${room}\n\n예약을 취소하시겠습니까?`;
+      
+      // Show confirm dialog
+      if (confirm(confirmMessage)) {
+        // If user confirms, proceed with the cancellation
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = this.href;
+        
+        // Add CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'authenticity_token';
+        csrfInput.value = csrfToken;
+        
+        // Add method input for PATCH
+        const methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        methodInput.value = 'patch';
+        
+        form.appendChild(csrfInput);
+        form.appendChild(methodInput);
+        document.body.appendChild(form);
+        form.submit();
+      }
+    });
+  });
+});
+</script>

@@ -89,6 +89,15 @@
             </td>
             <td class="px-4 py-3 text-sm">
               <%= form_with url: update_status_admin_reservation_path(reservation), method: :patch do |f| %>
+                <% if params[:search].present? %>
+                  <%= f.hidden_field :search, value: params[:search] %>
+                <% end %>
+                <% if params[:status].present? %>
+                  <%= f.hidden_field :filter_status, value: params[:status] %>
+                <% end %>
+                <% if params[:date].present? %>
+                  <%= f.hidden_field :date, value: params[:date] %>
+                <% end %>
                 <%= f.select :status, 
                     options_for_select([
                       ['활성', 'active'],
@@ -102,7 +111,11 @@
               <% end %>
             </td>
             <td class="px-4 py-3 text-sm">
-              <%= link_to "삭제", admin_reservation_path(reservation),
+              <% delete_params = {} %>
+              <% delete_params[:search] = params[:search] if params[:search].present? %>
+              <% delete_params[:status] = params[:status] if params[:status].present? %>
+              <% delete_params[:date] = params[:date] if params[:date].present? %>
+              <%= link_to "삭제", admin_reservation_path(reservation, delete_params),
                           method: :delete,
                           data: { turbo_method: :delete, turbo_confirm: "정말 삭제하시겠습니까?" },
                           class: "text-red-600 hover:text-red-800 text-xs" %>

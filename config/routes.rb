@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       member do
         patch :approve
         patch :reject
+        patch :hold
         patch :reset_password
         patch :update_teacher
       end

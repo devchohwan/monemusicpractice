@@ -31,11 +31,15 @@
                 <%= link_to "승인", approve_admin_user_path(user), 
                             method: :patch, 
                             data: { turbo_method: :patch },
-                            class: "bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700" %>
+                            class: "btn-approve" %>
+                <%= link_to "보류", hold_admin_user_path(user), 
+                            method: :patch, 
+                            data: { turbo_method: :patch },
+                            class: "btn-hold" %>
                 <%= link_to "거부", reject_admin_user_path(user), 
                             method: :patch, 
                             data: { turbo_method: :patch, turbo_confirm: "정말 거부하시겠습니까?" },
-                            class: "bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700" %>
+                            class: "btn-reject" %>
               </div>
             </div>
           </div>
@@ -44,55 +48,131 @@
     </div>
   <% end %>
   
-  <div>
-    <h3 class="text-lg font-medium mb-3">승인된 회원</h3>
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">이름</th>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">아이디</th>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">비밀번호</th>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">담당</th>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">가입일</th>
-            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-          <% @approved_users.each do |user| %>
-            <tr>
-              <td class="px-4 py-3 text-sm"><%= user.name %></td>
-              <td class="px-4 py-3 text-sm"><%= user.username %></td>
-              <td class="px-4 py-3 text-sm">
-                <span class="text-xs text-gray-500">암호화됨</span>
-                <button onclick="resetPassword('<%= user.username %>')" class="ml-2 text-xs text-blue-600 hover:text-blue-800">초기화</button>
-              </td>
-              <td class="px-4 py-3 text-sm">
-                <%= form_with url: update_teacher_admin_user_path(user), method: :patch, style: "display: inline-block;" do |f| %>
-                  <%= f.select :teacher,
-                      options_for_select(User::TEACHERS, user.teacher),
-                      {},
-                      class: "text-xs px-2 py-1 border border-gray-300 rounded",
-                      onchange: "this.form.requestSubmit()" %>
-                <% end %>
-              </td>
-              <td class="px-4 py-3 text-sm"><%= user.created_at.strftime('%Y-%m-%d') %></td>
-              <td class="px-4 py-3 text-sm">
-                <% unless user.is_admin? %>
-                  <%= link_to "삭제", admin_user_path(user), 
-                              method: :delete,
-                              data: { turbo_method: :delete, turbo_confirm: "정말 삭제하시겠습니까?" },
-                              class: "text-red-600 hover:text-red-800 text-sm" %>
-                <% else %>
-                  <span class="text-gray-400 text-sm">관리자</span>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+  <!-- 탭 네비게이션 -->
+  <div class="mb-6">
+    <div class="border-b border-gray-200">
+      <nav class="-mb-px flex gap-8">
+        <%= link_to "승인된 회원", admin_users_path(tab: 'approved'), 
+                    class: "#{params[:tab] != 'on_hold' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm" %>
+        
+        <%= link_to "보류된 회원 (#{@on_hold_users.count})", admin_users_path(tab: 'on_hold'),
+                    class: "#{params[:tab] == 'on_hold' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm" %>
+      </nav>
     </div>
   </div>
+  
+  <% if params[:tab] == 'on_hold' %>
+    <!-- 보류된 회원 목록 -->
+    <div class="pt-2">
+      <h3 class="text-lg font-medium mb-4 text-gray-800">보류된 회원</h3>
+      <% if @on_hold_users.any? %>
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+          <table class="w-full">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">이름</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">아이디</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">담당</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">보류일</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% @on_hold_users.each do |user| %>
+                <tr>
+                  <td class="px-4 py-3 text-sm"><%= user.name %></td>
+                  <td class="px-4 py-3 text-sm"><%= user.username %></td>
+                  <td class="px-4 py-3 text-sm">
+                    <%= form_with url: update_teacher_admin_user_path(user), method: :patch, style: "display: inline-block;" do |f| %>
+                      <%= f.select :teacher,
+                          options_for_select(User::TEACHERS, user.teacher),
+                          {},
+                          class: "text-xs px-2 py-1 border border-gray-300 rounded",
+                          onchange: "this.form.requestSubmit()" %>
+                    <% end %>
+                  </td>
+                  <td class="px-4 py-3 text-sm"><%= user.updated_at.strftime('%Y-%m-%d') %></td>
+                  <td class="px-4 py-3 text-sm">
+                    <div class="flex gap-2">
+                      <%= link_to "승인", approve_admin_user_path(user), 
+                                  method: :patch,
+                                  data: { turbo_method: :patch },
+                                  class: "text-green-600 hover:text-green-800 text-sm" %>
+                      <%= link_to "거부", reject_admin_user_path(user), 
+                                  method: :patch,
+                                  data: { turbo_method: :patch, turbo_confirm: "정말 거부하시겠습니까?" },
+                                  class: "text-red-600 hover:text-red-800 text-sm" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+          보류된 회원이 없습니다.
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <!-- 승인된 회원 목록 -->
+    <div class="pt-2">
+      <h3 class="text-lg font-medium mb-4 text-gray-800">승인된 회원</h3>
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">이름</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">아이디</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">비밀번호</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">담당</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">가입일</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">관리</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @approved_users.each do |user| %>
+              <tr>
+                <td class="px-4 py-3 text-sm"><%= user.name %></td>
+                <td class="px-4 py-3 text-sm"><%= user.username %></td>
+                <td class="px-4 py-3 text-sm">
+                  <span class="text-xs text-gray-500">암호화됨</span>
+                  <button onclick="resetPassword('<%= user.username %>')" class="ml-2 text-xs text-blue-600 hover:text-blue-800">초기화</button>
+                </td>
+                <td class="px-4 py-3 text-sm">
+                  <%= form_with url: update_teacher_admin_user_path(user), method: :patch, style: "display: inline-block;" do |f| %>
+                    <%= f.select :teacher,
+                        options_for_select(User::TEACHERS, user.teacher),
+                        {},
+                        class: "text-xs px-2 py-1 border border-gray-300 rounded",
+                        onchange: "this.form.requestSubmit()" %>
+                  <% end %>
+                </td>
+                <td class="px-4 py-3 text-sm"><%= user.created_at.strftime('%Y-%m-%d') %></td>
+                <td class="px-4 py-3 text-sm">
+                  <div class="flex gap-2">
+                    <% unless user.is_admin? %>
+                      <%= link_to "보류", hold_admin_user_path(user), 
+                                  method: :patch,
+                                  data: { turbo_method: :patch },
+                                  class: "link-hold" %>
+                      <%= link_to "삭제", admin_user_path(user), 
+                                  method: :delete,
+                                  data: { turbo_method: :delete, turbo_confirm: "정말 삭제하시겠습니까?" },
+                                  class: "text-red-600 hover:text-red-800 text-sm" %>
+                    <% else %>
+                      <span class="text-gray-400 text-sm">관리자</span>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
   
   <div class="mt-6">
     <%= link_to "관리자 대시보드로", admin_root_path, class: "text-gray-600 text-sm" %>

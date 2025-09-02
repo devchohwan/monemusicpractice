@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_082929) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_02_130128) do
   create_table "penalties", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "month", null: false
@@ -52,12 +52,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_082929) do
     t.string "username", null: false
     t.string "name", null: false
     t.string "teacher", null: false
-    t.boolean "approved", default: false, null: false
     t.boolean "is_admin", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_reset_token"
     t.datetime "password_reset_sent_at"
+    t.string "status", default: "pending", null: false
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end
